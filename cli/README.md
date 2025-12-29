@@ -4,31 +4,50 @@ A modern, professional desktop application starter template built with Tauri, Re
 
 ## 🚀 Quick Start
 
-### npm
+### Interactive Installation (Recommended)
+
+The CLI will guide you through configuration with interactive prompts:
+
+```bash
+npm create tauri-app-project-wind@latest
+```
+
+You'll be prompted for:
+- 📁 **Project folder name** – Name for your project directory (lowercase, dashes/underscores allowed)
+- 🏷️ **App display name** – How your app will be labeled in the window/titlebar
+- 👤 **Author name** – Your name or organization (used in metadata)
+- 📦 **Bundle identifier** – Reverse domain (e.g., com.company.app) for Tauri packaging
+- 📦 **Package manager** – Choose npm, yarn, pnpm, or bun
+- ⚡ **Auto-install** – Automatically install dependencies after setup
+
+### Quick Install with Defaults
+
+Provide the project name as an argument to skip the first prompt:
 
 ```bash
 npm create tauri-app-project-wind@latest my-app
-cd my-app
-npm install
-npm run tauri dev
 ```
 
-### yarn
+### Package Manager Specific
 
+#### npm
+```bash
+npm create tauri-app-project-wind@latest my-app
+```
+
+#### yarn
 ```bash
 yarn create tauri-app-project-wind my-app
-cd my-app
-yarn install
-yarn tauri dev
 ```
 
-### pnpm
-
+#### pnpm
 ```bash
 pnpm create tauri-app-project-wind my-app
-cd my-app
-pnpm install
-pnpm tauri dev
+```
+
+#### bun
+```bash
+bun create tauri-app-project-wind my-app
 ```
 
 ## ✨ What's Included

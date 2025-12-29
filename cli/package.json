@@ -1,11 +1,15 @@
 {
   "name": "create-tauri-app-project-wind",
-  "version": "1.0.1",
-  "description": "Create a new Project Wind Tauri app",
+  "version": "2.0.0",
+  "description": "Interactive CLI to create a customized Tauri + React + TypeScript desktop application",
   "main": "index.js",
   "bin": {
     "create-tauri-app-project-wind": "./index.js"
   },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
   "keywords": [
     "tauri",
     "react",
@@ -14,13 +18,18 @@
     "desktop",
     "starter",
     "template",
-    "project-wind"
+    "project-wind",
+    "cli",
+    "create",
+    "scaffolding",
+    "boilerplate"
   ],
   "author": "Sunny",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit.git"
+    "url": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit.git",
+    "directory": "cli"
   },
   "bugs": {
     "url": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit/issues"
@@ -28,5 +37,9 @@
   "homepage": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit#readme",
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "preferGlobal": true
 }
