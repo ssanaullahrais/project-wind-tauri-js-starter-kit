@@ -1,0 +1,32 @@
+{
+  "name": "create-project-wind",
+  "version": "1.0.0",
+  "description": "Create a new Project Wind Tauri app",
+  "main": "index.js",
+  "bin": {
+    "create-project-wind": "./index.js"
+  },
+  "keywords": [
+    "tauri",
+    "react",
+    "typescript",
+    "shadcn",
+    "desktop",
+    "starter",
+    "template",
+    "project-wind"
+  ],
+  "author": "Sunny",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit/issues"
+  },
+  "homepage": "https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
