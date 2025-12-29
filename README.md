@@ -28,6 +28,15 @@ A modern, professional desktop application starter template built with Tauri, Re
 - Rust (latest stable)
 - npm/yarn/pnpm
 
+
+### Using npm
+
+```bash
+npm create tauri-app-project-wind@latest my-app
+cd my-app
+npm install
+npm run tauri dev
+
 ### Installation
 
 ```bash
