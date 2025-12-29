@@ -200,20 +200,13 @@ import {
   AlertCircle,
   Terminal,
   Home,
-  Bell,
   Calendar as CalendarIcon,
   Info,
-  Menu,
-  Search,
-  ChevronRight,
   Bold,
   Italic,
   Underline,
-  Copy,
-  Mail,
   Plus,
   Minus,
-  Check,
   Calculator,
   Smile,
   CreditCard,
@@ -229,7 +222,6 @@ import {
   FieldDescription,
   FieldError,
   FieldGroup,
-  FieldContent,
 } from "@/components/ui/field";
 import {
   InputGroup,
@@ -254,15 +246,15 @@ const formSchema = z.object({
     message: "Bio must not exceed 160 characters.",
   }).optional(),
   framework: z.string({
-    required_error: "Please select a framework.",
+    message: "Please select a framework.",
   }),
-  newsletter: z.boolean().default(false),
+  newsletter: z.boolean().default(false).optional(),
   notifications: z.enum(["all", "mentions", "none"], {
-    required_error: "Please select a notification preference.",
+    message: "Please select a notification preference.",
   }),
-  marketingEmails: z.boolean().default(false),
+  marketingEmails: z.boolean().default(false).optional(),
   dob: z.date({
-    required_error: "A date of birth is required.",
+    message: "A date of birth is required.",
   }),
 });
 
@@ -284,12 +276,10 @@ export const DemoComponents = () => {
   const [status, setStatus] = useState("online");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isChecked, setIsChecked] = useState(false);
-  const [isAgreed, setIsAgreed] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [radioValue, setRadioValue] = useState("option-one");
   const [progress, setProgress] = useState(33);
   const [isOpen, setIsOpen] = useState(false);
-  const [commandOpen, setCommandOpen] = useState(false);
   const [togglePressed, setTogglePressed] = useState(false);
   const [toggleGroupValue, setToggleGroupValue] = useState("left");
 
@@ -1553,9 +1543,9 @@ export const DemoComponents = () => {
       <div className="space-y-4 p-6 bg-card rounded-lg border shadow-sm">
         <h2 className="text-md font-medium">Spinner</h2>
         <div className="flex items-center gap-4">
-          <Spinner size="sm" />
-          <Spinner size="default" />
-          <Spinner size="lg" />
+          <Spinner className="size-4" />
+          <Spinner className="size-6" />
+          <Spinner className="size-8" />
         </div>
       </div>
 

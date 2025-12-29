@@ -10,7 +10,6 @@ import {
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
-  MenubarCheckboxItem,
   MenubarRadioGroup,
   MenubarRadioItem,
 } from "@/components/ui/menubar";
@@ -331,7 +330,7 @@ export function TitleBar() {
                 {isMaximized ? "Restore" : "Maximize"}
               </MenubarItem>
               <MenubarSeparator />
-              <MenubarRadioGroup value={theme} onValueChange={setTheme}>
+              <MenubarRadioGroup value={theme} onValueChange={(value) => setTheme(value as "dark" | "light" | "system")}>
                 <MenubarRadioItem value="light">
                   <Sun className="mr-2 h-4 w-4" />
                   Light
