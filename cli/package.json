@@ -1,6 +1,6 @@
 {
   "name": "create-tauri-app-project-wind",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create a new Project Wind Tauri app",
   "main": "index.js",
   "bin": {
