@@ -1,10 +1,10 @@
 {
-  "name": "create-project-wind",
+  "name": "create-tauri-app-project-wind",
   "version": "1.0.0",
   "description": "Create a new Project Wind Tauri app",
   "main": "index.js",
   "bin": {
-    "create-project-wind": "./index.js"
+    "create-tauri-app-project-wind": "./index.js"
   },
   "keywords": [
     "tauri",

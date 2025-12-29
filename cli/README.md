@@ -1,4 +1,4 @@
-# create-project-wind
+# create-tauri-app-project-wind
 
 Create a new Project Wind Tauri app with one command.
 
@@ -7,7 +7,7 @@ Create a new Project Wind Tauri app with one command.
 ### npm
 
 ```bash
-npm create project-wind@latest my-app
+npm create tauri-app-project-wind@latest my-app
 cd my-app
 npm install
 npm run tauri dev
@@ -16,7 +16,7 @@ npm run tauri dev
 ### yarn
 
 ```bash
-yarn create project-wind my-app
+yarn create tauri-app-project-wind my-app
 cd my-app
 yarn install
 yarn tauri dev
@@ -25,7 +25,7 @@ yarn tauri dev
 ### pnpm
 
 ```bash
-pnpm create project-wind my-app
+pnpm create tauri-app-project-wind my-app
 cd my-app
 pnpm install
 pnpm tauri dev
