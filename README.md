@@ -29,20 +29,10 @@ A modern, professional desktop application starter template built with Tauri, Re
 - npm/yarn/pnpm
 
 
-### Using npm
+### Installation using CLI
 
 ```bash
-npm create tauri-app-project-wind@latest my-app
-cd my-app
-npm install
-npm run tauri dev
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/ssanaullahrais/project-wind-tauri-js-starter-kit.git
-cd project-wind-tauri-js-starter-kit
+npm create tauri-app-project-wind@latest
 
 # Install dependencies
 npm install
