@@ -1,6 +1,6 @@
 {
   "name": "create-tauri-app-project-wind",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Interactive CLI to create a customized Tauri + React + TypeScript desktop application",
   "main": "index.js",
   "bin": {

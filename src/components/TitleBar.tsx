@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { appWindow } from "@tauri-apps/api/window";
+import { appWindow, LogicalSize } from "@tauri-apps/api/window";
+import { exit } from '@tauri-apps/api/process';
 import { Minus, Square, X, Maximize2, Moon, Sun, Monitor, Keyboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
@@ -81,10 +82,47 @@ export function TitleBar() {
       checkMaximized();
     });
 
+    // Keyboard shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+H - Hide to tray
+      if (e.ctrlKey && e.key === 'h') {
+        e.preventDefault();
+        handleClose();
+      }
+      // Alt+F4 - Exit application
+      else if (e.altKey && e.key === 'F4') {
+        e.preventDefault();
+        handleExit();
+      }
+      // Ctrl+M - Minimize window
+      else if (e.ctrlKey && e.key === 'm') {
+        e.preventDefault();
+        handleMinimize();
+      }
+      // F11 - Toggle maximize
+      else if (e.key === 'F11') {
+        e.preventDefault();
+        handleMaximize();
+      }
+      // Ctrl+R - Reset window
+      else if (e.ctrlKey && e.key === 'r') {
+        e.preventDefault();
+        handleResetWindow();
+      }
+      // Ctrl+Shift+T - Toggle theme
+      else if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+        e.preventDefault();
+        setTheme(theme === 'dark' ? 'light' : 'dark');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       unlisten.then((fn) => fn());
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [theme]);
 
   const handleMinimize = () => {
     appWindow.minimize();
@@ -99,18 +137,39 @@ export function TitleBar() {
     }
   };
 
+  const handleResetWindow = async () => {
+    await appWindow.unmaximize();
+    await appWindow.setSize(new LogicalSize(1240, 800));
+    await appWindow.center();
+  };
+
   const handleClose = () => {
     appWindow.close();
   };
 
-  const handleDragStart = () => {
-    appWindow.startDragging();
+  const handleExit = async () => {
+    // Force exit the application
+    await exit(0);
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    // Only maximize if not clicking on interactive elements
+    const target = e.target as HTMLElement;
+    const isInteractive = target.closest('button, [role="menuitem"], [role="menu"]');
+
+    if (!isInteractive) {
+      handleMaximize();
+    }
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-12 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/40">
+    <div
+      data-tauri-drag-region
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-12 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/40 rounded-t-lg"
+      onDoubleClick={handleDoubleClick}
+    >
       {/* Left Section with Logo and Menubar */}
-      <div className="h-full flex items-center px-4 gap-2 md:gap-0">
+      <div data-tauri-drag-region className="h-full flex items-center px-4 gap-2 md:gap-0">
         {/* Mobile Menu - Show only on small screens */}
         <div className="md:hidden flex items-center">
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -160,6 +219,13 @@ export function TitleBar() {
                         variant="ghost"
                         className="w-full justify-start text-sm"
                         onClick={() => { handleClose(); setMobileMenuOpen(false); }}
+                      >
+                        Hide to Tray
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm text-destructive hover:text-destructive"
+                        onClick={() => { handleExit(); setMobileMenuOpen(false); }}
                       >
                         Exit
                       </Button>
@@ -214,6 +280,13 @@ export function TitleBar() {
                         onClick={() => { handleMaximize(); setMobileMenuOpen(false); }}
                       >
                         {isMaximized ? "Restore" : "Maximize"}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm"
+                        onClick={() => { handleResetWindow(); setMobileMenuOpen(false); }}
+                      >
+                        Reset Window
                       </Button>
                       <Separator className="my-2" />
                       <div className="px-2 py-1 text-xs font-medium text-muted-foreground">Theme</div>
@@ -278,18 +351,14 @@ export function TitleBar() {
         </div>
 
         {/* Logo */}
-        <div
-          className="flex items-center gap-3 h-full select-none cursor-move md:mr-2"
-          onMouseDown={handleDragStart}
-          onDoubleClick={handleMaximize}
-        >
+        <div data-tauri-drag-region className="flex items-center gap-3 h-full select-none md:mr-2 pointer-events-none">
           {/* App Icon/Logo */}
-          <div className="flex items-center justify-center w-6 h-6 rounded-md bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-            <div className="w-3 h-3 rounded-sm bg-gradient-to-br from-primary to-primary/60" />
+          <div data-tauri-drag-region className="flex items-center justify-center w-6 h-6 rounded-md bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+            <div data-tauri-drag-region className="w-3 h-3 rounded-sm bg-gradient-to-br from-primary to-primary/60" />
           </div>
 
           {/* App Title */}
-          <span className="text-sm font-medium text-foreground/90">
+          <span data-tauri-drag-region className="text-sm font-medium text-foreground/90">
             Project Wind
           </span>
         </div>
@@ -304,7 +373,10 @@ export function TitleBar() {
               </MenubarItem>
               <MenubarItem>Open...</MenubarItem>
               <MenubarSeparator />
-              <MenubarItem onClick={handleClose}>Exit</MenubarItem>
+              <MenubarItem onClick={handleClose}>Hide to Tray</MenubarItem>
+              <MenubarItem onClick={handleExit} className="text-destructive focus:text-destructive">
+                Exit
+              </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
 
@@ -329,6 +401,7 @@ export function TitleBar() {
               <MenubarItem onClick={handleMaximize}>
                 {isMaximized ? "Restore" : "Maximize"}
               </MenubarItem>
+              <MenubarItem onClick={handleResetWindow}>Reset Window</MenubarItem>
               <MenubarSeparator />
               <MenubarRadioGroup value={theme} onValueChange={(value) => setTheme(value as "dark" | "light" | "system")}>
                 <MenubarRadioItem value="light">
@@ -363,12 +436,8 @@ export function TitleBar() {
         </Menubar>
       </div>
 
-      {/* Draggable spacer */}
-      <div
-        className="flex-1 cursor-move"
-        onMouseDown={handleDragStart}
-        onDoubleClick={handleMaximize}
-      ></div>
+      {/* Spacer */}
+      <div data-tauri-drag-region className="flex-1 pointer-events-none"></div>
 
       {/* Window Controls */}
       <div className="flex h-full items-center">
@@ -483,79 +552,39 @@ export function TitleBar() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-3">
-              <div className="font-medium text-sm">General</div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Open Command Palette</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+K</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Quick Search</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+P</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Toggle Sidebar</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+B</kbd>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <div className="font-medium text-sm">Navigation</div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Go Back</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Alt+Left</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Go Forward</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Alt+Right</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Switch Tab</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+Tab</kbd>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <div className="font-medium text-sm">Editing</div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Undo</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+Z</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Redo</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+Y</kbd>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Select All</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+A</kbd>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <div className="font-medium text-sm">Window</div>
+              <div className="font-medium text-sm">Window Controls</div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">Minimize Window</span>
                   <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+M</kbd>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Toggle Fullscreen</span>
+                  <span className="text-muted-foreground">Toggle Maximize</span>
                   <kbd className="px-2 py-1 text-xs bg-muted rounded border">F11</kbd>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Close Window</span>
-                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+W</kbd>
+                  <span className="text-muted-foreground">Reset Window</span>
+                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+R</kbd>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Hide to Tray</span>
+                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+H</kbd>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Exit Application</span>
+                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Alt+F4</kbd>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <div className="font-medium text-sm">Appearance</div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Toggle Theme</span>
+                  <kbd className="px-2 py-1 text-xs bg-muted rounded border">Ctrl+Shift+T</kbd>
                 </div>
               </div>
             </div>

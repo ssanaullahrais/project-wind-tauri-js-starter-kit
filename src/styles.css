@@ -65,10 +65,14 @@
   * {
     @apply border-border;
   }
-  html, body, #root {
+  html, body {
     @apply h-full w-full overflow-hidden;
+    background: transparent;
+  }
+  #root {
+    @apply h-full w-full overflow-hidden rounded-lg;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply text-foreground font-sans;
   }
 }

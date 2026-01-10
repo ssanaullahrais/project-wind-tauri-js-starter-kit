@@ -7,9 +7,14 @@
   },
   "package": {
     "productName": "Project Wind",
-    "version": "1.0.0"
+    "version": "2.1.0"
   },
   "tauri": {
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true,
+      "menuOnLeftClick": false
+    },
     "allowlist": {
       "all": false,
       "shell": {
@@ -25,6 +30,12 @@
         "readFile": true,
         "writeFile": true
       },
+      "process": {
+        "all": false,
+        "exit": true,
+        "relaunch": false,
+        "relaunchDangerousAllowSymlinkMacos": false
+      },
       "window": {
         "all": false,
         "close": true,
@@ -34,7 +45,10 @@
         "minimize": true,
         "unmaximize": true,
         "unminimize": true,
-        "startDragging": true
+        "startDragging": true,
+        "setSize": true,
+        "center": true,
+        "setFocus": true
       }
     },
     "windows": [
@@ -46,7 +60,9 @@
         "minHeight": 800,
         "decorations": false,
         "transparent": true,
-        "center": true
+        "center": true,
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay"
       }
     ],
     "security": {
